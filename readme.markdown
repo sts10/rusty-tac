@@ -106,7 +106,7 @@ Here are some concrete examples of this.
 
 #### The `player` variable
 
-In my tic-tac-go game, there's a simple part where we alternate between player 1 and player 2.
+Here's a "soft" example of the compiler nudging me. In my tic-tac-go game, there's a simple part where we alternate between player 1 and player 2.
 
 So here's what I initially wrote:
 
