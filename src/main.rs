@@ -171,7 +171,7 @@ fn alfred_pick(b: &[i32]) -> i32 {
     match line {
         0 => find_an_open(2,4,6, &b),
         1 => find_an_open(0,3,6, &b),
-        2 => find_an_open(0,4,7, &b),
+        2 => find_an_open(1,4,7, &b),
         3 => find_an_open(2,5,8, &b),
         4 => find_an_open(0,4,8, &b),
         5 => find_an_open(6,7,8, &b),
@@ -192,6 +192,7 @@ fn alfred_find_line(b: &[i32]) -> i32 {
       if v == &20{ 
           println!("found a 20");
           return i; 
+          // println!("I should never see this!!");
       }
       i = i + 1;
   }
@@ -201,6 +202,7 @@ fn alfred_find_line(b: &[i32]) -> i32 {
       if v == &2{ 
           println!("found a 2 to block");
           return i; 
+          // println!("I should never see this!!");
       }
       i = i + 1;
   }
@@ -210,10 +212,12 @@ fn alfred_find_line(b: &[i32]) -> i32 {
       if v == &10{ 
           println!("found a 10-- I'll take it");
           return i; 
+          // println!("I should never see this!!");
       }
       i = i + 1;
   }
 
+  println!("picking randomly");
   return ed_pick(&b)
 }
 
