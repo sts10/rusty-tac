@@ -1,5 +1,7 @@
+extern crate rand;
+
 use std::io;
-use std::rand::{task_rng, Rng};
+use rand::Rng;
 
 fn main() {
     let mut game_over = false;
@@ -18,9 +20,18 @@ fn main() {
         }
 
         println!("Player {}'s turn", player);
-        let current_move = get_int_from_input();
-        println!("I got {}", current_move);
-        execute_player_move(current_move, player, &mut board);
+        if player == 1{
+            // let current_move = get_int_from_input();
+            // println!("For current move I got {}", current_move);
+            // execute_player_move(current_move, player, &mut board);
+            //
+            // let's one-line this shit:
+            execute_player_move(get_int_from_input(), player, &mut board);
+        } else {
+            execute_player_move(ed_pick(&board), player, &mut board);
+        }
+
+
         if check_for_win(&board)  {
             println!("Player {} wins!", player);
             game_over = true;
@@ -108,12 +119,15 @@ fn check_for_win(b: &[i32]) -> bool {
 
 fn ed_pick(b: &[i32]) -> i32 {
 // a number from [-40.0, 13000.0)
-    while true {
-        let num: i32 = task_rng().gen_range(0, 8);
+    let mut num: i32 = rand::thread_rng().gen_range(0, 8);
+    loop {
         if b[num as usize] == 0{
-            return num;
+            break;
+        } else {
+            num = rand::thread_rng().gen_range(0, 8);
         }
     }
+    return num;
 }
 /*
 fn calc_sums(b: &[i32]) -> [i32; 8] {
