@@ -11,7 +11,6 @@ fn main() {
 
 
     while game_over != true {
-        present_board(&board);
         let player;
         if turn_number % 2 == 1{
             player = 1;
@@ -20,6 +19,8 @@ fn main() {
         }
 
         println!("Player {}'s turn", player);
+        present_board(&board);
+
         if player == 1{
             // let current_move = get_int_from_input();
             // println!("For current move I got {}", current_move);
@@ -46,26 +47,27 @@ fn main() {
 // and not, kept referring to "integer" or "Integer" rather than i32. Using "int" threw unhelpful
 // error
 fn present_board(b: &[i32]){
-   // println!("board is {:?}", b);
-   let mut i = 0;
-   while i < b.len() {
-       match b[i] {
-           // if empty, print the number that a user would enter to move
-           // to this space
-           0 => print!("{}",i),
-           1 => print!("X"),
-           2 => print!("O"),
-           10 => print!("O"),
-           _ => break,
-       }
-       // and now, some decorators
-       if i > 0 && (i+1) % 3 == 0{
-           print!("\n");
-       } else{
-           print!(" | ");
-       }
-       i = i + 1;
-   }
+    println!("---------");
+    let mut i = 0;
+    while i < b.len() {
+        match b[i] {
+            // if empty, print the number that a user would enter to move
+            // to this space
+            0 => print!("{}",i),
+            1 => print!("X"),
+            2 => print!("O"),
+            10 => print!("O"),
+            _ => break,
+        }
+        // and now, some decorators
+        if i > 0 && (i+1) % 3 == 0{
+            print!("\n");
+        } else{
+            print!(" | ");
+        }
+        i = i + 1;
+    }
+    println!("---------");
 }
 
 fn get_int_from_input() -> i32 {
