@@ -29,7 +29,7 @@ fn main() {
             execute_player_move(get_int_from_input(), player, &mut board);
         } else {
             // execute_player_move(ed_pick(&board), player, &mut board);
-            execute_player_move(alfred_pick(&mut board), player, &mut board);
+            execute_player_move(alfred_pick(&board), player, &mut board);
         }
 
 
@@ -164,7 +164,7 @@ fn calc_sums(b: &[i32]) -> [i32; 8] {
     return sums;
 }
 
-fn alfred_pick(b: &mut [i32]) -> i32 {
+fn alfred_pick(b: &[i32]) -> i32 {
     let line = alfred_find_line(b);
     match line {
         0 => find_an_open(2,4,6, &b),
@@ -187,19 +187,28 @@ fn alfred_find_line(b: &[i32]) -> i32 {
   let mut i = 0; 
 
   for v in &sums {
-      if v == &20{ return i; }
+      if v == &20{ 
+          println!("found a 20");
+          return i; 
+      }
       i = i + 1;
   }
 
   i = 0;
   for v in &sums {
-      if v == &2{ return i; }
+      if v == &2{ 
+          println!("found a 2 to block");
+          return i; 
+      }
       i = i + 1;
   }
 
   i = 0;
   for v in &sums {
-      if v == &10{ return i; }
+      if v == &10{ 
+          println!("found a 10-- I'll take it");
+          return i; 
+      }
       i = i + 1;
   }
 
