@@ -28,7 +28,8 @@ fn main() {
             // let's one-line this shit:
             execute_player_move(get_int_from_input(), player, &mut board);
         } else {
-            execute_player_move(ed_pick(&board), player, &mut board);
+            // execute_player_move(ed_pick(&board), player, &mut board);
+            execute_player_move(alfred_pick(&mut board), player, &mut board);
         }
 
 
@@ -87,13 +88,33 @@ fn get_int_from_input() -> i32 {
 // woof this was a beast. Had to go to the irc channel. Eventually, the answer was to 
 // transfer ownership, rather than a reference, to current_move and player; and to 
 // convert this_move from an i32 to a usize with `as` when you want to use it as an index
-fn execute_player_move(current_move: i32, player: i32, b: &mut [i32]) {
+fn execute_player_move(current_move: i32, player: i32, b: &mut [i32]) -> bool {
     let this_move = current_move;
-    if player == 1{
-        b[this_move as usize] = 1;
-    } else if player == 2{
-        b[this_move as usize] = 10;
+    if b[this_move as usize] == 0 {
+        if player == 1{
+            b[this_move as usize] = 1;
+        } else if player == 2{
+            b[this_move as usize] = 10;
+        }
+        return true;
+    } else {
+        return false;
     }
+}
+
+fn is_open(desired_move: i32, b: &[i32]) -> bool {
+    if b[desired_move as usize] == 0 {
+        return true;
+    } else {
+        return false;
+    }
+}
+
+fn find_an_open(a: i32, b: i32, c :i32, board: &[i32]) -> i32 {
+    if is_open(a, board) { return a; }
+    else if is_open(b, board) { return b; }
+    else if is_open(c, board) { return c; }
+    else { return 11; }
 }
 
 fn check_for_win(b: &[i32]) -> bool {
@@ -129,7 +150,7 @@ fn ed_pick(b: &[i32]) -> i32 {
     }
     return num;
 }
-/*
+
 fn calc_sums(b: &[i32]) -> [i32; 8] {
     let mut sums: [i32; 8] = [0; 8]; // mutable Array of 7 `usize`s, all with value of 0
     sums[0] = b[2]+b[4]+b[6];
@@ -143,14 +164,45 @@ fn calc_sums(b: &[i32]) -> [i32; 8] {
     return sums;
 }
 
-fn alfred_pick(b: &[i32]) -> i32 {
+fn alfred_pick(b: &mut [i32]) -> i32 {
+    let line = alfred_find_line(b);
+    match line {
+        0 => find_an_open(2,4,6, &b),
+        1 => find_an_open(0,3,6, &b),
+        2 => find_an_open(0,4,7, &b),
+        3 => find_an_open(2,5,8, &b),
+        4 => find_an_open(0,4,8, &b),
+        5 => find_an_open(6,7,8, &b),
+        6 => find_an_open(3,4,5, &b),
+        7 => find_an_open(0,1,5, &b),
+        _ => ed_pick(&b)
+    }
+
+}
+
+//helper
+fn alfred_find_line(b: &[i32]) -> i32 {
   let sums = calc_sums(b);
 
-  for v in &sums {
-      match v {
-          &20 -> break;
+  let mut i = 0; 
 
-      }
+  for v in &sums {
+      if v == &20{ return i; }
+      i = i + 1;
   }
+
+  i = 0;
+  for v in &sums {
+      if v == &2{ return i; }
+      i = i + 1;
+  }
+
+  i = 0;
+  for v in &sums {
+      if v == &10{ return i; }
+      i = i + 1;
+  }
+
+  return ed_pick(&b)
 }
-*/
+
