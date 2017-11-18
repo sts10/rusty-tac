@@ -145,8 +145,9 @@ fn check_for_win(b: &[i32]) -> bool {
 
 fn check_if_board_full(b: &[i32]) -> bool {
     let mut sum: i32 = 0;
-    for v in b {
-        sum += v;
+    for v in b.iter() {
+        // sum += v;
+        sum = sum + v;
     }
     if sum == 45{
         // full board
