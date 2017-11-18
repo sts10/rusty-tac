@@ -37,6 +37,9 @@ fn main() {
         if check_for_win(&board)  {
             println!("Player {} wins!", player);
             game_over = true;
+        } else if check_if_board_full(&board){
+            println!("Board is full-- it's a tie");
+            game_over = true;
         } else {
             turn_number = turn_number + 1;
         }
@@ -138,6 +141,20 @@ fn check_for_win(b: &[i32]) -> bool {
         }
     }
     return false;
+}
+
+fn check_if_board_full(b: &[i32]) -> bool {
+    let mut sum: i32 = 0;
+    for v in b.iter() {
+        // sum += v;
+        sum = sum + v;
+    }
+    if sum == 45{
+        // full board
+        return true;
+    } else {
+        return false;
+    }
 }
 
 fn ed_pick(b: &[i32]) -> i32 {
