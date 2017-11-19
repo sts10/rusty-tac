@@ -5,10 +5,8 @@ use rand::Rng;
 
 fn main() {
     let mut game_over = false;
-    // let game_over = false;
     let mut turn_number = 1;
     let mut board = [0,0,0, 0,0,0, 0,0,0];
-
 
     while game_over != true {
         let player;
@@ -22,19 +20,14 @@ fn main() {
         present_board(&board);
 
         if player == 1{
-            // let current_move = get_int_from_input();
-            // println!("For current move I got {}", current_move);
-            // execute_player_move(current_move, player, &mut board);
-            //
-            // let's one-line this shit:
             execute_player_move(get_int_from_input(), player, &mut board);
         } else {
-            // execute_player_move(ed_pick(&board), player, &mut board);
+            // execute_player_move(random_pick(&board), player, &mut board);
             execute_player_move(alfred_pick(&board), player, &mut board);
         }
 
-
-        if check_for_win(&board)  {
+        if check_for_win(&board) {
+            present_board(&board);
             println!("Player {} wins!", player);
             game_over = true;
         } else if check_if_board_full(&board){
@@ -91,15 +84,14 @@ fn get_int_from_input() -> i32 {
 
 // https://play.rust-lang.org/?gist=182dc2ad8763bc3fa683d52749e202b4&version=stable
 // woof this was a beast. Had to go to the irc channel. Eventually, the answer was to 
-// transfer ownership, rather than a reference, of current_move and player; and to 
+// transfer ownership, rather than a reference, of this_move and player; and to 
 // convert this_move from an i32 to a usize with `as` when you want to use it as an index
-fn execute_player_move(current_move: i32, player: i32, b: &mut [i32]) -> bool {
-    let this_move = current_move;
+fn execute_player_move(this_move: i32, player: i32, b: &mut [i32]) -> bool {
     if b[this_move as usize] == 0 {
-        if player == 1{
-            b[this_move as usize] = 1;
-        } else if player == 2{
-            b[this_move as usize] = 10;
+        match player {
+            1 => b[this_move as usize] = 1,
+            2 => b[this_move as usize] = 10,
+            _ => return false,
         }
         return true;
     } else {
@@ -108,14 +100,16 @@ fn execute_player_move(current_move: i32, player: i32, b: &mut [i32]) -> bool {
 }
 
 fn is_open(desired_move: i32, b: &[i32]) -> bool {
-    if b[desired_move as usize] == 0 {
-        return true;
-    } else {
-        return false;
+    match b[desired_move as usize] {
+        0 => return true,
+        _ => return false,
     }
 }
 
 fn find_an_open(a: i32, b: i32, c :i32, board: &[i32]) -> i32 {
+    // Given three integers representing spaces on the board, find the first that 
+    // is open
+    // Wonder if this could be changed to a match statement...
     if is_open(a, board) { return a; }
     else if is_open(b, board) { return b; }
     else if is_open(c, board) { return c; }
@@ -123,16 +117,7 @@ fn find_an_open(a: i32, b: i32, c :i32, board: &[i32]) -> i32 {
 }
 
 fn check_for_win(b: &[i32]) -> bool {
-    let mut sums: [i32; 8] = [0; 8]; // mutable Array of 7 `usize`s, all with value of 0
-    sums[0] = b[2]+b[4]+b[6];
-    sums[1] = b[0]+b[3]+b[6];
-    sums[2] = b[1]+b[4]+b[7];
-    sums[3] = b[2]+b[5]+b[8];
-    sums[4] = b[0]+b[4]+b[8];
-    sums[5] = b[6]+b[7]+b[8];
-    sums[6] = b[3]+b[4]+b[5];
-    sums[7] = b[0]+b[1]+b[2];
-
+    let sums = calc_sums(b);
     for v in &sums {
         match v {
             &3 => return true,
@@ -151,7 +136,7 @@ fn check_if_board_full(b: &[i32]) -> bool {
     }
 }
 
-fn ed_pick(b: &[i32]) -> i32 {
+fn random_pick(b: &[i32]) -> i32 {
 // a number from [-40.0, 13000.0)
     let mut num: i32 = rand::thread_rng().gen_range(0, 8);
     loop {
@@ -188,12 +173,11 @@ fn alfred_pick(b: &[i32]) -> i32 {
         5 => find_an_open(6,7,8, &b),
         6 => find_an_open(3,4,5, &b),
         7 => find_an_open(0,1,2, &b),
-        _ => ed_pick(&b)
+        _ => random_pick(&b)
     }
-
 }
 
-//helper
+// helper function
 fn alfred_find_line(b: &[i32]) -> i32 {
   let sums = calc_sums(b);
 
@@ -203,7 +187,6 @@ fn alfred_find_line(b: &[i32]) -> i32 {
       if v == &20{ 
           println!("found a 20 at {}", i);
           return i; 
-          // println!("I should never see this!!");
       }
       i = i + 1;
   }
@@ -229,6 +212,6 @@ fn alfred_find_line(b: &[i32]) -> i32 {
   }
 
   println!("picking randomly");
-  return ed_pick(&b)
+  return random_pick(&b)
 }
 
