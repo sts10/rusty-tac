@@ -91,7 +91,7 @@ fn get_int_from_input() -> i32 {
 
 // https://play.rust-lang.org/?gist=182dc2ad8763bc3fa683d52749e202b4&version=stable
 // woof this was a beast. Had to go to the irc channel. Eventually, the answer was to 
-// transfer ownership, rather than a reference, to current_move and player; and to 
+// transfer ownership, rather than a reference, of current_move and player; and to 
 // convert this_move from an i32 to a usize with `as` when you want to use it as an index
 fn execute_player_move(current_move: i32, player: i32, b: &mut [i32]) -> bool {
     let this_move = current_move;
@@ -144,16 +144,10 @@ fn check_for_win(b: &[i32]) -> bool {
 }
 
 fn check_if_board_full(b: &[i32]) -> bool {
-    let mut sum: i32 = 0;
-    for v in b.iter() {
-        // sum += v;
-        sum = sum + v;
-    }
-    if sum == 45{
-        // full board
-        return true;
-    } else {
-        return false;
+    let sum: i32 = b.iter().sum();
+    match sum {
+        45 => return true,
+        _  => return false,
     }
 }
 
@@ -207,7 +201,7 @@ fn alfred_find_line(b: &[i32]) -> i32 {
 
   for v in &sums {
       if v == &20{ 
-          println!("found a 20");
+          println!("found a 20 at {}", i);
           return i; 
           // println!("I should never see this!!");
       }
