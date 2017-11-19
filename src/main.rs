@@ -131,7 +131,7 @@ fn check_for_win(b: &[i32]) -> bool {
     sums[4] = b[0]+b[4]+b[8];
     sums[5] = b[6]+b[7]+b[8];
     sums[6] = b[3]+b[4]+b[5];
-    sums[7] = b[0]+b[1]+b[5];
+    sums[7] = b[0]+b[1]+b[2];
 
     for v in &sums {
         match v {
@@ -173,7 +173,7 @@ fn calc_sums(b: &[i32]) -> [i32; 8] {
     sums[4] = b[0]+b[4]+b[8];
     sums[5] = b[6]+b[7]+b[8];
     sums[6] = b[3]+b[4]+b[5];
-    sums[7] = b[0]+b[1]+b[5];
+    sums[7] = b[0]+b[1]+b[2];
     return sums;
 }
 
@@ -187,7 +187,7 @@ fn alfred_pick(b: &[i32]) -> i32 {
         4 => find_an_open(0,4,8, &b),
         5 => find_an_open(6,7,8, &b),
         6 => find_an_open(3,4,5, &b),
-        7 => find_an_open(0,1,5, &b),
+        7 => find_an_open(0,1,2, &b),
         _ => ed_pick(&b)
     }
 
