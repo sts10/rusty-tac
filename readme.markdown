@@ -12,7 +12,7 @@ To check for a winner, I'm using a second array called `sums` that adds up each 
 
 Woof, just writing Rust that compiles is hard. 
 
-Here is [a long blog post I wrote about making this little game](https://sts10.github.io/2017/11/18/trying-go-and-rust.html)
+**Here is [a long blog post I wrote about making this little game](https://sts10.github.io/2017/11/18/trying-go-and-rust.html)**
 
 ### Resources consulted
 
