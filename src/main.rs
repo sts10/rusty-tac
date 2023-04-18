@@ -142,13 +142,12 @@ fn check_if_board_full(b: &[i32]) -> bool {
 }
 
 fn random_pick(b: &[i32]) -> i32 {
-    // a number from [-40.0, 13000.0)
-    let mut num: i32 = rand::thread_rng().gen_range(0, 8);
+    let mut num: i32 = rand::thread_rng().gen_range(0..=8);
     loop {
         if b[num as usize] == 0 {
             break;
         } else {
-            num = rand::thread_rng().gen_range(0, 8);
+            num = rand::thread_rng().gen_range(0..=8);
         }
     }
     return num;
