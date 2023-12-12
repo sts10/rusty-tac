@@ -39,9 +39,10 @@ fn main() {
     }
 }
 
-// Figuring out how pass this array was real tricky to figure out. Errors, both intentional (board[2].what_the_fuck_type_is_this;)
-// and not, kept referring to "integer" or "Integer" rather than i32. Using "int" threw unhelpful
-// error
+// Figuring out how pass this array was real tricky to figure out.
+// Errors, both intentional (board[2].what_type_is_this;)
+// and not, kept referring to "integer" or "Integer" rather than i32.
+// Using "int" threw unhelpful error
 fn present_board(b: &[i32]) {
     println!("---------");
     let mut i = 0;
