@@ -1,8 +1,10 @@
 [package]
 name = "rusty_tac"
 version = "0.1.0"
+edition = "2021"
 authors = ["Sam Schlinkert <sschlinkert@gmail.com>"]
 license = "BlueOak-1.0.0"
+readme = "readme.markdown"
 
 [dependencies]
 rand = "0.8.5"

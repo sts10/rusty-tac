@@ -1,5 +1,3 @@
-extern crate rand;
-
 use rand::Rng;
 use std::io;
 
@@ -22,7 +20,6 @@ fn main() {
         if player == 1 {
             execute_player_move(get_int_from_input(), player, &mut board);
         } else {
-            // execute_player_move(random_pick(&board), player, &mut board);
             execute_player_move(alfred_pick(&board), player, &mut board);
         }
 
@@ -31,7 +28,7 @@ fn main() {
             println!("Player {} wins!", player);
             game_over = true;
         } else if check_if_board_full(&board) {
-            println!("Board is full-- it's a tie");
+            println!("Board is full... It's a tie!");
             game_over = true;
         } else {
             turn_number = turn_number + 1;
@@ -39,10 +36,10 @@ fn main() {
     }
 }
 
-// Figuring out how pass this array was real tricky to figure out.
-// Errors, both intentional (board[2].what_type_is_this;)
-// and not, kept referring to "integer" or "Integer" rather than i32.
-// Using "int" threw unhelpful error
+/// Figuring out how pass this array was real tricky to figure out.
+/// Errors, both intentional (board[2].what_type_is_this;)
+/// and not, kept referring to "integer" or "Integer" rather than i32.
+/// Using "int" threw unhelpful error
 fn present_board(b: &[i32]) {
     println!("---------");
     let mut i = 0;
@@ -76,17 +73,17 @@ fn get_int_from_input() -> i32 {
         // return;
     }
     let trimmed: &str = input_text.trim();
-    let option: Option<i32> = trimmed.parse::<i32>().ok();
-    match option {
-        Some(i) => return i,
-        None => return 11,
-    };
+    match trimmed.parse::<i32>() {
+        Ok(i) => return i,
+        // we could handle this better...
+        Err(_e) => panic!("Bad user input. Please enter a number between 0 and 8."),
+    }
 }
 
-// https://play.rust-lang.org/?gist=182dc2ad8763bc3fa683d52749e202b4&version=stable
-// woof this was a beast. Had to go to the irc channel. Eventually, the answer was to
-// transfer ownership, rather than a reference, of this_move and player; and to
-// convert this_move from an i32 to a usize with `as` when you want to use it as an index
+/// https://play.rust-lang.org/?gist=182dc2ad8763bc3fa683d52749e202b4&version=stable
+/// Woof, writing this function was a beast. Had to go to the irc channel. Eventually, the answer was to
+/// transfer ownership, rather than a reference, of this_move and player; and to
+/// convert this_move from an i32 to a usize with `as` when you want to use it as an index
 fn execute_player_move(this_move: i32, player: i32, b: &mut [i32]) -> bool {
     if b[this_move as usize] == 0 {
         match player {
@@ -118,7 +115,7 @@ fn find_an_open(a: i32, b: i32, c: i32, board: &[i32]) -> i32 {
     } else if is_open(c, board) {
         return c;
     } else {
-        return 11;
+        panic!("Could not find an open space!");
     }
 }
 
@@ -190,7 +187,7 @@ fn alfred_find_line(b: &[i32]) -> i32 {
 
     for v in &sums {
         if v == &20 {
-            println!("found a 20 at {}", i);
+            // println!("found a 20 at {}", i);
             return i;
         }
         i = i + 1;
@@ -199,9 +196,8 @@ fn alfred_find_line(b: &[i32]) -> i32 {
     i = 0;
     for v in &sums {
         if v == &2 {
-            println!("found a 2 to block");
+            // println!("found a 2 to block");
             return i;
-            // println!("I should never see this!!");
         }
         i = i + 1;
     }
@@ -209,13 +205,13 @@ fn alfred_find_line(b: &[i32]) -> i32 {
     i = 0;
     for v in &sums {
         if v == &10 {
-            println!("found a 10-- I'll take it");
+            // Found a 10-- I'll take it
             return i;
-            // println!("I should never see this!!");
+            // unreachable
         }
         i = i + 1;
     }
 
-    println!("picking randomly");
+    // Pick randomly
     return random_pick(&b);
 }
