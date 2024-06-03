@@ -6,13 +6,10 @@ fn main() {
     let mut turn_number = 1;
     let mut board = [0, 0, 0, 0, 0, 0, 0, 0, 0];
 
-    while game_over != true {
-        let player;
-        if turn_number % 2 == 1 {
-            player = 1;
-        } else {
-            player = 2;
-        }
+    // while game_over is not true, keep playing
+    while !game_over {
+        // Use an if to define a new variable, player, in one of two ways
+        let player = if turn_number % 2 == 1 { 1 } else { 2 };
 
         println!("Player {}'s turn", player);
         present_board(&board);
@@ -31,7 +28,8 @@ fn main() {
             println!("Board is full... It's a tie!");
             game_over = true;
         } else {
-            turn_number = turn_number + 1;
+            // add 1 to turn_number
+            turn_number += 1;
         }
     }
 }
@@ -55,11 +53,11 @@ fn present_board(b: &[i32]) {
         }
         // and now, some decorators
         if i > 0 && (i + 1) % 3 == 0 {
-            print!("\n");
+            println!();
         } else {
             print!(" | ");
         }
-        i = i + 1;
+        i += 1;
     }
     println!("---------");
 }
@@ -74,7 +72,8 @@ fn get_int_from_input() -> i32 {
     }
     let trimmed: &str = input_text.trim();
     match trimmed.parse::<i32>() {
-        Ok(i) => return i,
+        // if we parsed successfully, return i (implicitedly)
+        Ok(i) => i,
         // we could handle this better...
         Err(_e) => panic!("Bad user input. Please enter a number between 0 and 8."),
     }
@@ -91,16 +90,16 @@ fn execute_player_move(this_move: i32, player: i32, b: &mut [i32]) -> bool {
             2 => b[this_move as usize] = 10,
             _ => return false,
         }
-        return true;
+        true
     } else {
-        return false;
+        false
     }
 }
 
 fn is_open(desired_move: i32, b: &[i32]) -> bool {
     match b[desired_move as usize] {
-        0 => return true,
-        _ => return false,
+        0 => true,
+        _ => false,
     }
 }
 
@@ -109,11 +108,11 @@ fn find_an_open(a: i32, b: i32, c: i32, board: &[i32]) -> i32 {
     // is open
     // Wonder if this could be changed to a match statement...
     if is_open(a, board) {
-        return a;
+        a
     } else if is_open(b, board) {
-        return b;
+        b
     } else if is_open(c, board) {
-        return c;
+        c
     } else {
         panic!("Could not find an open space!");
     }
@@ -122,20 +121,20 @@ fn find_an_open(a: i32, b: i32, c: i32, board: &[i32]) -> i32 {
 fn check_for_win(b: &[i32]) -> bool {
     let sums = calc_sums(b);
     for v in &sums {
-        match v {
-            &3 => return true,
-            &30 => return true,
+        match *v {
+            3 => return true,
+            30 => return true,
             _ => continue,
         }
     }
-    return false;
+    false
 }
 
 fn check_if_board_full(b: &[i32]) -> bool {
     let sum: i32 = b.iter().sum();
     match sum {
-        45 => return true,
-        _ => return false,
+        45 => true,
+        _ => false,
     }
 }
 
@@ -148,7 +147,7 @@ fn random_pick(b: &[i32]) -> i32 {
             num = rand::thread_rng().gen_range(0..=8);
         }
     }
-    return num;
+    num
 }
 
 fn calc_sums(b: &[i32]) -> [i32; 8] {
@@ -161,21 +160,22 @@ fn calc_sums(b: &[i32]) -> [i32; 8] {
     sums[5] = b[6] + b[7] + b[8];
     sums[6] = b[3] + b[4] + b[5];
     sums[7] = b[0] + b[1] + b[2];
-    return sums;
+    // return sums array
+    sums
 }
 
 fn alfred_pick(b: &[i32]) -> i32 {
     let line = alfred_find_line(b);
     match line {
-        0 => find_an_open(2, 4, 6, &b),
-        1 => find_an_open(0, 3, 6, &b),
-        2 => find_an_open(1, 4, 7, &b),
-        3 => find_an_open(2, 5, 8, &b),
-        4 => find_an_open(0, 4, 8, &b),
-        5 => find_an_open(6, 7, 8, &b),
-        6 => find_an_open(3, 4, 5, &b),
-        7 => find_an_open(0, 1, 2, &b),
-        _ => random_pick(&b),
+        0 => find_an_open(2, 4, 6, b),
+        1 => find_an_open(0, 3, 6, b),
+        2 => find_an_open(1, 4, 7, b),
+        3 => find_an_open(2, 5, 8, b),
+        4 => find_an_open(0, 4, 8, b),
+        5 => find_an_open(6, 7, 8, b),
+        6 => find_an_open(3, 4, 5, b),
+        7 => find_an_open(0, 1, 2, b),
+        _ => random_pick(b),
     }
 }
 
@@ -183,6 +183,7 @@ fn alfred_pick(b: &[i32]) -> i32 {
 fn alfred_find_line(b: &[i32]) -> i32 {
     let sums = calc_sums(b);
 
+    // define a mutable coutner variable called i. set it to 0.
     let mut i = 0;
 
     for v in &sums {
@@ -190,7 +191,8 @@ fn alfred_find_line(b: &[i32]) -> i32 {
             // println!("found a 20 at {}", i);
             return i;
         }
-        i = i + 1;
+        // increment i by 1
+        i += 1;
     }
 
     i = 0;
@@ -199,7 +201,7 @@ fn alfred_find_line(b: &[i32]) -> i32 {
             // println!("found a 2 to block");
             return i;
         }
-        i = i + 1;
+        i += 1;
     }
 
     i = 0;
@@ -209,9 +211,9 @@ fn alfred_find_line(b: &[i32]) -> i32 {
             return i;
             // unreachable
         }
-        i = i + 1;
+        i += 1;
     }
 
-    // Pick randomly
-    return random_pick(&b);
+    // Pick randomly and implicitedly return that value
+    random_pick(b)
 }
